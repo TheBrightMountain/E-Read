@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace BTL
 {
@@ -11,7 +6,25 @@ namespace BTL
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["UserEmail"] != null)
+            {
+                LinkButtonHome.Visible = true;
+                LinkButtonRead.Visible = true;
+                LinkButtonUpload.Visible = true;
+                LinkButtonProfile.Visible = true;
+                LinkButtonSignup.Visible = false;
+                LinkButtonLogin.Visible = false;
+                LinkButtonLogout.Visible = true;
+            } else
+            {
+                LinkButtonHome.Visible = true;
+                LinkButtonRead.Visible = true;
+                LinkButtonUpload.Visible = false;
+                LinkButtonProfile.Visible = false;
+                LinkButtonSignup.Visible = true;
+                LinkButtonLogin.Visible = true;
+                LinkButtonLogout.Visible = false;
+            }
         }
 
         protected void LinkButtonHome_Click(object sender, EventArgs e)
@@ -20,6 +33,11 @@ namespace BTL
         }
 
         protected void LinkButtonRead_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void LinkButtonUpload_Click(object sender, EventArgs e)
         {
 
         }
@@ -41,7 +59,8 @@ namespace BTL
 
         protected void LinkButtonLogout_Click(object sender, EventArgs e)
         {
-
+            Session.Abandon();
+            Response.Redirect("Home.aspx");
         }
     }
 }

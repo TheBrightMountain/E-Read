@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BTL.dao;
+using BTL.model;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace BTL
 {
@@ -24,39 +19,18 @@ namespace BTL
             {
                 if (string.IsNullOrEmpty(TextBoxEmail.Text) || string.IsNullOrEmpty(TextBoxPassword.Text))
                 {
-                    Notify("Please fill in both email and password fields!");
+                    Notify("Please fill in all the empty fields!");
                     return;
                 }
-                string email = TextBoxEmail.Text.Trim();
-                string enteredPassword = TextBoxPassword.Text.Trim();
-                string storedPasswordHash = null;
-                string name = null;
-                using (SqlConnection con = new SqlConnection(strCon))
+                UserDAO userDAO = new UserDAO();
+                if (userDAO.Verify(TextBoxEmail.Text.Trim(),TextBoxPassword.Text.Trim()))
                 {
-                    using (SqlCommand cmd = new SqlCommand("SELECT PasswordHash, Name FROM Users WHERE Email = @Email", con))
-                    {
-                        cmd.Parameters.AddWithValue("@Email", email);
-                        con.Open();
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-                        if (reader.Read())
-                        {
-                            storedPasswordHash = reader["PasswordHash"].ToString();
-                            name = reader["Name"].ToString();
-                        }
-                        else
-                        {
-                            Notify("Invalid email or password.");
-                            return;
-                        }
-                    }
-                }
-                var passwordHasher = new PasswordHasher<object>();
-                var verificationResult = passwordHasher.VerifyHashedPassword(null, storedPasswordHash, enteredPassword);
-                if (verificationResult == PasswordVerificationResult.Success)
-                {
-                    Session["UserEmail"] = email;
-                    Session["UserName"] = name;
+                    User user = userDAO.Read(TextBoxEmail.Text.Trim());
+                    Session["UserEmail"] = user.Email;
+                    Session["UserName"] = user.Name;
+                    Session["UserBirthdate"] = user.DateOfBirth;
+                    Session["UserPhone"] = user.Phone;
+                    Session["UserCity"] = user.City;
                     Response.Redirect("Home.aspx");
                 }
                 else
