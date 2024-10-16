@@ -27,13 +27,10 @@ namespace BTL
                     Notify("Please fill in both email and password fields!");
                     return;
                 }
-
                 string email = TextBoxEmail.Text.Trim();
                 string enteredPassword = TextBoxPassword.Text.Trim();
                 string storedPasswordHash = null;
                 string name = null;
-
-                // Retrieve the stored password hash from the database
                 using (SqlConnection con = new SqlConnection(strCon))
                 {
                     using (SqlCommand cmd = new SqlCommand("SELECT PasswordHash, Name FROM Users WHERE Email = @Email", con))
@@ -54,23 +51,16 @@ namespace BTL
                         }
                     }
                 }
-
-                // Create a PasswordHasher instance
                 var passwordHasher = new PasswordHasher<object>();
-
-                // Verify the entered password against the stored hash
                 var verificationResult = passwordHasher.VerifyHashedPassword(null, storedPasswordHash, enteredPassword);
-
                 if (verificationResult == PasswordVerificationResult.Success)
                 {
-                    // Password match, login successful
-                    Session["UserEmail"] = email; // Store user info in session
+                    Session["UserEmail"] = email;
                     Session["UserName"] = name;
-                    Response.Redirect("Home.aspx"); // Redirect to dashboard or home page
+                    Response.Redirect("Home.aspx");
                 }
                 else
                 {
-                    // Password does not match
                     Notify("Invalid email or password.");
                 }
             }
