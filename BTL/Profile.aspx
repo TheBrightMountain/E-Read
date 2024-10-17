@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Signup.aspx.cs" Inherits="BTL.Signup" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Profile.aspx.cs" Inherits="BTL.Profile" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col">
                                 <center>
-                                    <h3>Member Registration</h3>
+                                    <h3>Profile</h3>
                                 </center>
                             </div>
                         </div>
@@ -91,7 +91,15 @@
                                             Email
                                         </label>
                                         <div class="form-group">
-                                            <asp:TextBox class="form-control" ID="TextBoxEmail" runat="server" placeholder="Email" TextMode="Email"></asp:TextBox>
+                                            <asp:TextBox class="form-control-plaintext" ID="TextBoxEmail" runat="server" placeholder="Email" TextMode="Email" ReadOnly="True"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="ms-1 mb-1">
+                                            Password
+                                        </label>
+                                        <div class="form-group">
+                                            <asp:TextBox class="form-control" ID="TextBoxCurrentPassword" runat="server" placeholder="Current password" TextMode="Password"></asp:TextBox>
                                         </div>
                                     </div>
                                 </div>
@@ -101,15 +109,15 @@
                                             Password
                                         </label>
                                         <div class="form-group">
-                                            <asp:TextBox class="form-control" ID="TextBoxPassword" runat="server" placeholder="Password" TextMode="Password"></asp:TextBox>
+                                            <asp:TextBox class="form-control" ID="TextBoxNewPassword" runat="server" placeholder="New password" TextMode="Password"></asp:TextBox>
                                         </div>
                                     </div>
-                                    <div class="col-md-6  mb-5">
+                                    <div class="col-md-6 mb-3">
                                         <label class="ms-1 mb-1">
                                             Confirm password
                                         </label>
                                         <div class="form-group">
-                                            <asp:TextBox class="form-control" ID="TextBoxConfPassword" runat="server" placeholder="Confirm password" TextMode="Password"></asp:TextBox>
+                                            <asp:TextBox class="form-control" ID="TextBoxConfNewPassword" runat="server" placeholder="Confirm new password" TextMode="Password"></asp:TextBox>
                                         </div>
                                     </div>
                                 </div>
@@ -118,12 +126,17 @@
                                         <asp:Label class="alert alert-danger" role="alert" ID="LabelNotify" runat="server" Text="" Visible="False"></asp:Label>
                                     </center>
                                 </div>
-                                <div>
-                                    <center>
-                                        <div class="form-group mb-3">
-                                            <asp:Button class="btn btn-primary btn-lg w-75" ID="ButtonSignup" runat="server" Text="Sign up" OnClick="ButtonSignup_Click" />
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-group">
+                                            <asp:Button class="btn btn-danger btn-lg w-100" ID="ButtonDelete" runat="server" Text="Delete permanently" OnClick="ButtonDelete_Click" />
                                         </div>
-                                    </center>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-group">
+                                            <asp:Button class="btn btn-success btn-lg w-100" ID="ButtonUpdate" runat="server" Text="Update"  OnClick="ButtonUpdate_Click"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

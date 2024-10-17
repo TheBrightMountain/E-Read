@@ -6,7 +6,26 @@ namespace BTL
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["UserEmail"] != null)
+            if (Session["UserRole"] != null && Session["UserRole"].ToString() == "user")
+            {
+                LinkButtonHome.Visible = true;
+                LinkButtonRead.Visible = true;
+                LinkButtonUpload.Visible = false;
+                LinkButtonProfile.Visible = true;
+                LinkButtonSignup.Visible = false;
+                LinkButtonLogin.Visible = false;
+                LinkButtonLogout.Visible = true;
+            }
+            else if (Session["UserRole"] != null && Session["UserRole"].ToString() == "contributor")
+            {
+                LinkButtonHome.Visible = true;
+                LinkButtonRead.Visible = true;
+                LinkButtonUpload.Visible = true;
+                LinkButtonProfile.Visible = true;
+                LinkButtonSignup.Visible = false;
+                LinkButtonLogin.Visible = false;
+                LinkButtonLogout.Visible = true;
+            } else if (Session["UserRole"] != null && Session["UserRole"].ToString() == "admin")
             {
                 LinkButtonHome.Visible = true;
                 LinkButtonRead.Visible = true;
@@ -44,7 +63,7 @@ namespace BTL
 
         protected void LinkButtonProfile_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("Profile.aspx");
         }
 
         protected void LinkButtonSignup_Click(object sender, EventArgs e)

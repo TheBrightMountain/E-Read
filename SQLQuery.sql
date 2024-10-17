@@ -4,5 +4,6 @@ CREATE TABLE Users (
     Name NVARCHAR(100),             
     DateOfBirth DATE,              
     Phone VARCHAR(20),                      
-    City NVARCHAR(100)                      
+    City NVARCHAR(100),
+	Role NVARCHAR(20)
 );

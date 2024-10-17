@@ -9,6 +9,7 @@ namespace BTL.model
     //    DateOfBirth DATE,
     //    Phone VARCHAR(20),                      
     //    City NVARCHAR(100)
+    //    Role NVARCHAR(20)
     //);
 
     public class User
@@ -19,5 +20,6 @@ namespace BTL.model
         public DateTime DateOfBirth { get; set; }
         public string Phone { get; set; }
         public string City { get; set; }
+        public string Role { get; set; }
     }
 }

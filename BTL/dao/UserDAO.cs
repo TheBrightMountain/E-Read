@@ -15,7 +15,7 @@ namespace BTL.dao
             string hashedPassword = passwordHasher.HashPassword(null, newUser.Password);
             using (SqlConnection con = new SqlConnection(strCon))
             {
-                string query = "INSERT INTO Users (Email, Password, Name, DateOfBirth, Phone, City) VALUES (@Email, @Password, @Name, @DateOfBirth, @Phone, @City)";
+                string query = "INSERT INTO Users (Email, Password, Name, DateOfBirth, Phone, City, Role) VALUES (@Email, @Password, @Name, @DateOfBirth, @Phone, @City, @Role)";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@Email", newUser.Email);
@@ -24,6 +24,7 @@ namespace BTL.dao
                     cmd.Parameters.AddWithValue("@DateOfBirth", newUser.DateOfBirth);
                     cmd.Parameters.AddWithValue("@Phone", newUser.Phone);
                     cmd.Parameters.AddWithValue("@City", newUser.City);
+                    cmd.Parameters.AddWithValue("@Role", newUser.Role);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -34,7 +35,7 @@ namespace BTL.dao
         {
             using (SqlConnection con = new SqlConnection(strCon))
             {
-                string query = "UPDATE Users SET Name = @Name, DateOfBirth = @DateOfBirth, Phone = @Phone, City = @City WHERE Email = @Email";
+                string query = "UPDATE Users SET Name = @Name, DateOfBirth = @DateOfBirth, Phone = @Phone, City = @City, Role = @Role WHERE Email = @Email";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@Email", updatedUser.Email);
@@ -42,6 +43,7 @@ namespace BTL.dao
                     cmd.Parameters.AddWithValue("@DateOfBirth", updatedUser.DateOfBirth);
                     cmd.Parameters.AddWithValue("@Phone", updatedUser.Phone);
                     cmd.Parameters.AddWithValue("@City", updatedUser.City);
+                    cmd.Parameters.AddWithValue("@Role", updatedUser.Role);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -53,7 +55,7 @@ namespace BTL.dao
             User user = null;
             using (SqlConnection con = new SqlConnection(strCon))
             {
-                string query = "SELECT Email, Password, Name, DateOfBirth, Phone, City FROM Users WHERE Email = @Email";
+                string query = "SELECT Email, Password, Name, DateOfBirth, Phone, City, Role FROM Users WHERE Email = @Email";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@Email", email);
@@ -68,7 +70,8 @@ namespace BTL.dao
                             Name = reader["Name"].ToString(),
                             DateOfBirth = DateTime.Parse(reader["DateOfBirth"].ToString()),
                             Phone = reader["Phone"].ToString(),
-                            City = reader["City"].ToString()
+                            City = reader["City"].ToString(),
+                            Role = reader["Role"].ToString()
                         };
                     }
                 }
@@ -92,7 +95,7 @@ namespace BTL.dao
 
         public bool Verify(string email, string password)
         {
-            User user = Read(email); // Retrieve the user from the database
+            User user = Read(email);
 
             if (user != null)
             {

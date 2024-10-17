@@ -1,18 +1,38 @@
 ﻿using BTL.dao;
 using BTL.model;
 using System;
-using System.Configuration;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace BTL
 {
-    public partial class Signup : System.Web.UI.Page
+    public partial class Profile : System.Web.UI.Page
     {
+        UserDAO UserDAO = new UserDAO();
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack && Session["UserEmail"] != null)
+            {
+                User user = UserDAO.Read(Session["UserEmail"].ToString());
+                TextBoxEmail.Text = user.Email;
+                TextBoxName.Text = user.Name;
+                TextBoxBirthdate.Text = user.DateOfBirth.ToString("yyyy-MM-dd");
+                TextBoxPhone.Text = user.Phone;
+                TextBoxCity.Text = user.City;
+            }
         }
 
-        protected void ButtonSignup_Click(object sender, EventArgs e)
+        protected void ButtonDelete_Click(object sender, EventArgs e)
+        {
+            UserDAO.Delete(Session["UserEmail"].ToString());
+            Session.Abandon();
+            Response.Redirect("Home.aspx");
+        }
+
+        protected void ButtonUpdate_Click(object sender, EventArgs e)
         {
             try
             {
@@ -22,36 +42,18 @@ namespace BTL
                     Notify("Please fill in all the empty fields!");
                     return;
                 }
-                if (string.IsNullOrEmpty(TextBoxPassword.Text) || string.IsNullOrEmpty(TextBoxConfPassword.Text))
-                {
-                    Notify("Please fill in both password fields!");
-                    return;
-                }
-                if (TextBoxPassword.Text.Trim() != TextBoxConfPassword.Text.Trim())
-                {
-                    Notify("Passwords don't match. Please re-enter!");
-                    return;
-                }
-                if (userDAO.EmailExists(TextBoxEmail.Text.Trim()))
-                {
-                    Notify("Email already exists. Please use a different email!");
-                    return;
-                }
-
-                User newUser = new User
+                User user = userDAO.Read(Session["UserEmail"].ToString());
+                User updatedUser = new User
                 {
                     Email = TextBoxEmail.Text.Trim(),
-                    Password = TextBoxPassword.Text.Trim(),
+                    Password = user.Password,
                     Name = TextBoxName.Text.Trim(),
                     DateOfBirth = DateTime.Parse(TextBoxBirthdate.Text),
                     Phone = TextBoxPhone.Text.Trim(),
                     City = TextBoxCity.Text.Trim(),
-                    Role = "user"
+                    Role = user.Role
                 };
-
-                userDAO.Create(newUser);
-
-                Response.Redirect("Home.aspx");
+                userDAO.Update(updatedUser);
             }
             catch (Exception ex)
             {
